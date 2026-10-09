@@ -41,7 +41,9 @@ public class Main {
         CommandRegistry registry = new CommandRegistry();
         registry.register(new AuthorCommand());
         registry.register(new AboutCommand());
+        registry.register(new CharacterCommand());
         registry.register(new HelpCommand(registry));
+
 
         BotLogic logic = new BotLogic(registry);
 
