@@ -27,7 +27,6 @@ int strength, int dexterity, int constitution, int intelligence, int wisdom, int
         this.intelligence = intelligence;
         this.wisdom = wisdom;
         this.charisma = charisma;
-        this.hp = hp;
 
         if (race.equals("Elf")){
             this.dexterity += 1;
@@ -53,5 +52,10 @@ int strength, int dexterity, int constitution, int intelligence, int wisdom, int
             this.charisma += 1;
             this.dexterity +=1;
         }
+    }
+
+    @Override
+    public String toString() {
+        return name + " " + surname;
     }
 }
