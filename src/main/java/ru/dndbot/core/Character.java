@@ -15,7 +15,7 @@ public class Character{
     int hp;
 
     public Character(String name, String surname, String character_class, String race, String role,
-int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma, int hp){
+int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma){
         this.name = name;
         this.surname = surname;
         this.character_class = character_class;
