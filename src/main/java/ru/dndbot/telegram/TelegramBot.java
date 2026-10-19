@@ -16,6 +16,7 @@ public class TelegramBot implements LongPollingSingleThreadUpdateConsumer{
     public TelegramBot(String token, BotLogic logic) {
         this.client = new OkHttpTelegramClient(token);
         this.logic = logic;
+
     }
     @Override
     public void consume(Update update) {
@@ -23,12 +24,15 @@ public class TelegramBot implements LongPollingSingleThreadUpdateConsumer{
             return;
         }
         String chatID = String.valueOf(update.getMessage().getChatId());
-        String reply = logic.handle(update.getMessage().getText());
+        long telegramId = update.getMessage().getFrom().getId();
+        String reply = logic.handle(update.getMessage().getText(), telegramId);
         try{
             client.execute(new SendMessage(chatID,reply));
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
     }
+
+
     
 }

@@ -2,6 +2,8 @@ package ru.dndbot.core;
 
 import ru.dndbot.command.CommandRegistry;
 
+import java.io.IOException;
+
 public class BotLogic {
     private final CommandRegistry registry;
 
@@ -9,7 +11,7 @@ public class BotLogic {
         this.registry = registry;
     }
 
-    public String handle(String text){
+    public String handle(String text, long telegramId){
         String trimmed = text.trim();
         if (!trimmed.startsWith("/")) {
             return "Я понимаю только команды. Наберите /help";
@@ -25,6 +27,12 @@ public class BotLogic {
             name="help";
         }
         String args = parts.length > 1 ? parts[1] : "";
-        return registry.find(name).map(c -> c.execute(args)).orElse("Неизвестная команда /" + name + ". Наберите /help");
+        return registry.find(name).map(c -> {
+            try {
+                return c.execute(args, telegramId);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }).orElse("Неизвестная команда /" + name + ". Наберите /help");
     }
 }

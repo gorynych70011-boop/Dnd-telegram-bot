@@ -1,5 +1,8 @@
 package ru.dndbot.command;
 import ru.dndbot.core.Character;
+import ru.dndbot.core.Player;
+
+import java.io.IOException;
 
 public class CharacterCommand implements Command {
     @Override
@@ -23,46 +26,54 @@ public class CharacterCommand implements Command {
     }
 
     @Override
-    public String execute(String args) {
-
+    public String execute(String args, long telegramId) throws IOException {
         if (args == null || args.isBlank()) {
-            return """
-                В меню вы можете:
-                •Создать своего персонажа
-                •Выбрать из списка готовых
 
-                0 - создать самому 
-                1 - выбрать первого
-                2 - выбрать второго
-                3 - выбрать третьего""";
+            return """
+            В меню вы можете:
+            •Создать своего персонажа
+            •Выбрать из списка готовых
+
+            0 - создать самому 
+            1 - выбрать первого
+            2 - выбрать второго
+            3 - выбрать третьего""";
         }
+
+
 
         String[] parts = args.trim().split("\\s+");
 
         if (parts.length > 0) {
             String choice = parts[0];
 
-                if (choice.equals("1")) {
+            switch (choice) {
+                case "1" -> {
                     Character c1 = new Character("A", "B", "Fighter", "Human", "Abc",
                             1, 2, 3, 4, 5, 6);
 
-                    return "Создан персонаж: " + c1.toString();
+                    long id = 123456789L;
+                    Player p1 = new Player(id, c1);
+                    Player.save(p1);
 
-                } else if (choice.equals("2")) {
+                    return "Создан персонаж: " + c1.toString();
+                }
+                case "2" -> {
                     Character c2 = new Character("C", "D", "Barbarian", "Gnom", "Qwer",
                             6, 5, 4, 3, 2, 1);
 
                     return "Создан персонаж: " + c2.toString();
-
-                } else if (choice.equals("3")) {
+                }
+                case "3" -> {
                     Character c3 = new Character("E", "F", "Sorcerer", "XZ", "WASD",
                             10, 10, 10, 10, 10, 10);
 
                     return "Создан персонаж: " + c3.toString();
-
-                } else if (choice.equals("0")){
+                }
+                case "0" -> {
                     return usage();
                 }
+            }
         }
 
         try {
@@ -82,6 +93,7 @@ public class CharacterCommand implements Command {
             Character character = new Character(name, surname, race, charClass, role,
                     str, dex, con, intl, wis, cha);
 
+            Player.save(new Player(telegramId, character));
             return "Персонаж успешно создан\n\n" + character.toString();
 
         } catch (NumberFormatException e) {

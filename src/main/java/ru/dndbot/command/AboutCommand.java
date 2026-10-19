@@ -17,7 +17,7 @@ public class AboutCommand implements Command {
     }
 
     @Override
-    public String execute(String args) {
+    public String execute(String args, long telegramId) {
         return """
                 Текстовая ролевая игра по мотивам D&D.
 
