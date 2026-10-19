@@ -12,7 +12,7 @@ public class Player {
     public Character character;
 
     private static final Gson GSON = new Gson();
-
+    private static final Path DIR = Path.of("players");
 
     public Player(long telegramId, Character character){
         this.telegramId = telegramId;
@@ -20,15 +20,14 @@ public class Player {
     }
 
     public static void save(Player player) throws IOException {
-        String FILE = player.telegramId + ".json";
-        Files.writeString(Path.of(FILE),GSON.toJson(player));
+        Files.createDirectories(DIR);
+        Path file = DIR.resolve(player.telegramId + ".json");
+        Files.writeString(file, GSON.toJson(player));
+
     }
 
     public static Player findByTelegramId(long telegramId) throws IOException {
-        String FILE = telegramId + ".json";
-        return GSON.fromJson(
-
-    Files.readString(Path.of(FILE)), Player.class);
+        Path file = DIR.resolve(telegramId + ".json");
+        return GSON.fromJson(Files.readString(file), Player.class);
     }
-
 }
