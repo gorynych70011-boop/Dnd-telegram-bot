@@ -1,4 +1,5 @@
 package ru.dndbot.command;
+
 import ru.dndbot.core.Character;
 import ru.dndbot.core.Player;
 
@@ -27,55 +28,42 @@ public class CharacterCommand implements Command {
 
     @Override
     public String execute(String args, long telegramId) throws IOException {
+
         if (args == null || args.isBlank()) {
-
             return """
-            В меню вы можете:
-            •Создать своего персонажа
-            •Выбрать из списка готовых
+                В меню вы можете:
+                •Создать своего персонажа
+                •Выбрать из списка готовых
 
-            0 - создать самому 
-            1 - выбрать первого
-            2 - выбрать второго
-            3 - выбрать третьего""";
+                0 - создать самому 
+                1 - выбрать первого
+                2 - выбрать второго
+                3 - выбрать третьего""";
         }
-
-
 
         String[] parts = args.trim().split("\\s+");
 
-        if (parts.length > 0) {
-            String choice = parts[0];
-
-            switch (choice) {
-                case "1" -> {
-                    Character c1 = new Character("A", "B", "Fighter", "Human", "Abc",
-                            1, 2, 3, 4, 5, 6);
-
-                    long id = 123456789L;
-                    Player p1 = new Player(id, c1);
-                    Player.save(p1);
-
-                    return "Создан персонаж: " + c1.toString();
-                }
-                case "2" -> {
-                    Character c2 = new Character("C", "D", "Barbarian", "Gnom", "Qwer",
-                            6, 5, 4, 3, 2, 1);
-
-                    return "Создан персонаж: " + c2.toString();
-                }
-                case "3" -> {
-                    Character c3 = new Character("E", "F", "Sorcerer", "XZ", "WASD",
-                            10, 10, 10, 10, 10, 10);
-
-                    return "Создан персонаж: " + c3.toString();
-                }
-                case "0" -> {
-                    return usage();
-                }
-            }
+        if (parts.length == 1 && parts[0].equals("0")) {
+            return usage();
         }
 
+        // Если пользователь выбрал готового персонажа
+        if (parts.length == 1 && (parts[0].equals("1") || parts[0].equals("2") || parts[0].equals("3"))) {
+            Character c;
+            if (parts[0].equals("1")) {
+                c = new Character("A", "B", "Fighter", "Human", "Abc", 1, 2, 3, 4, 5, 6);
+            } else if (parts[0].equals("2")) {
+                c = new Character("C", "D", "Barbarian", "Gnom", "Qwer", 6, 5, 4, 3, 2, 1);
+            } else {
+                c = new Character("E", "F", "Sorcerer", "XZ", "WASD", 10, 10, 10, 10, 10, 10);
+            }
+
+            Player.save(new Player(telegramId, c));
+            System.out.println(">>> Сохранен готовый персонаж для ID: " + telegramId);
+            return "Выбран персонаж: " + c.toString();
+        }
+
+        // Если введены кастомные характеристики
         try {
             String name = parts[0];
             String surname = parts[1];
@@ -93,14 +81,21 @@ public class CharacterCommand implements Command {
             Character character = new Character(name, surname, race, charClass, role,
                     str, dex, con, intl, wis, cha);
 
+            // ВОТ ГЛАВНАЯ СТРОКА СОХРАНЕНИЯ:
             Player.save(new Player(telegramId, character));
+
+            System.out.println(">>> Кастомный персонаж успешно сохранен для ID: " + telegramId);
+
             return "Персонаж успешно создан\n\n" + character.toString();
 
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return "Ошибка: вы ввели слишком мало параметров. Проверьте пример в /character.";
         } catch (NumberFormatException e) {
             return "Ошибка: характеристики должны быть целыми числами.\n" + e.getMessage();
         } catch (IllegalArgumentException e) {
             return "Ошибка: " + e.getMessage();
         } catch (Exception e) {
+            e.printStackTrace(); // Выведет ошибку в консоль!
             return "Непредвиденная ошибка: " + e.getMessage();
         }
     }
@@ -112,5 +107,4 @@ public class CharacterCommand implements Command {
             throw new NumberFormatException("Поле " + statName + " = '" + value + "' не является числом.");
         }
     }
-
 }
