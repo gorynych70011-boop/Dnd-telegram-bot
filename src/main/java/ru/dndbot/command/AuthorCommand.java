@@ -14,7 +14,7 @@ public class AuthorCommand implements ru.dndbot.command.Command {
         return "/author - выводит список авторов бота и их контакты.";
     }
     @Override
-    public String execute(String args){
+    public String execute(String args, long telegramId){
         return """
                 Авторы бота:
                 • Фамилия Имя — @AGPT

@@ -54,6 +54,15 @@ int strength, int dexterity, int constitution, int intelligence, int wisdom, int
         }
     }
 
+    public String getName() { return name; }
+
+    public int getStrength() { return strength; }
+    public int getDexterity() { return dexterity; }
+    public int getConstitution() { return constitution; }
+    public int getIntelligence() { return intelligence; }
+    public int getWisdom() { return wisdom; }
+    public int getCharisma() { return charisma; }
+
     @Override
     public String toString() {
         return name + " " + surname;

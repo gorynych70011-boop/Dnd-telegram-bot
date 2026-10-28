@@ -26,7 +26,7 @@ public class HelpCommand implements Command {
     }
 
     @Override
-    public String execute(String args) {
+    public String execute(String args, long telegramId) {
         if (args.isBlank()) {
             StringBuilder sb = new StringBuilder("Доступные команды:\n");
             for (Command c : registry.all()) {
