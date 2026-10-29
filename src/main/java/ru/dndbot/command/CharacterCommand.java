@@ -2,7 +2,7 @@ package ru.dndbot.command;
 
 import ru.dndbot.core.Character;
 import ru.dndbot.core.Player;
-
+import java.nio.file.Path;
 import java.io.IOException;
 
 public class CharacterCommand implements Command {
@@ -58,7 +58,7 @@ public class CharacterCommand implements Command {
                 c = new Character("E", "F", "Sorcerer", "XZ", "WASD", 10, 10, 10, 10, 10, 10);
             }
 
-            Player.save(new Player(telegramId, c));
+            Player.save(new Player(telegramId, c), Path.of("players"));
             System.out.println(">>> Сохранен готовый персонаж для ID: " + telegramId);
             return "Выбран персонаж: " + c.toString();
         }
@@ -82,7 +82,7 @@ public class CharacterCommand implements Command {
                     str, dex, con, intl, wis, cha);
 
             // ВОТ ГЛАВНАЯ СТРОКА СОХРАНЕНИЯ:
-            Player.save(new Player(telegramId, character));
+            Player.save(new Player(telegramId, character), Path.of("players"));
 
             System.out.println(">>> Кастомный персонаж успешно сохранен для ID: " + telegramId);
 

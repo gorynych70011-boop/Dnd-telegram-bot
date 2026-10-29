@@ -3,9 +3,11 @@ package ru.dndbot.command;
 import ru.dndbot.core.Character;
 import ru.dndbot.core.Check;
 import ru.dndbot.core.Player;
+import ru.dndbot.core.PlayerRead;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.nio.file.Path;
 
 public class CheckCommand implements Command {
     @Override
@@ -49,7 +51,7 @@ public class CheckCommand implements Command {
             return "Ошибка: сложность должна быть целым числом.\n" + usage();
         }
 
-        Player player = Player.findByTelegramId(telegramId);
+        Player player = PlayerRead.findByTelegramId(telegramId, Path.of("players"));
         if (player == null || player.character == null) {
             return "У вас ещё нет персонажа. Создайте его командой /character";
         }
