@@ -19,11 +19,11 @@ public class CharacterCommand implements Command {
     @Override
     public String usage() {
         return "Создание персонажа\n" +
-                "`/character <Имя> <Фамилия> <Раса> <Класс> <Роль> <STR> <DEX> <CON> <INT> <WIS> <CHA>`\n\n" +
+                "`/character <Имя> <Фамилия> <Раса> <Класс> <Роль> <STR> <DEX> <CON> <INT> <WIS> <CHA> <HP> <ARMOR>`\n\n" +
                 "Доступные расы: Human, Elf, Dwarf\n" +
                 "Доступные классы: Fighter, Barbarian, Sorcerer\n\n" +
                 "Пример:\n" +
-                "`/character Dima Chirykin Human Fighter Student 10 12 14 8 10 16`";
+                "`/character Dima Chirykin Human Fighter Student 10 12 14 8 10 16 100 100`";
     }
 
     @Override
@@ -51,11 +51,14 @@ public class CharacterCommand implements Command {
         if (parts.length == 1 && (parts[0].equals("1") || parts[0].equals("2") || parts[0].equals("3"))) {
             Character c;
             if (parts[0].equals("1")) {
-                c = new Character("A", "B", "Fighter", "Human", "Abc", 1, 2, 3, 4, 5, 6);
+                c = new Character("A", "B", "Fighter", "Human", "Abc", 1, 2,
+                        3, 4, 5, 6, 100, 100);
             } else if (parts[0].equals("2")) {
-                c = new Character("C", "D", "Barbarian", "Gnom", "Qwer", 6, 5, 4, 3, 2, 1);
+                c = new Character("C", "D", "Barbarian", "Gnom", "Qwer", 6, 5,
+                        4, 3, 2, 1, 100, 100);
             } else {
-                c = new Character("E", "F", "Sorcerer", "XZ", "WASD", 10, 10, 10, 10, 10, 10);
+                c = new Character("E", "F", "Sorcerer", "XZ", "WASD", 10, 10,
+                        10, 10, 10, 10, 100, 100);
             }
 
             Player.save(new Player(telegramId, c), Path.of("players"));
@@ -77,9 +80,11 @@ public class CharacterCommand implements Command {
             int intl = parseInt(parts[8],  "INT");
             int wis  = parseInt(parts[9],  "WIS");
             int cha  = parseInt(parts[10], "CHA");
+            int hp = parseInt(parts[11], "HP");
+            int armor = parseInt(parts[12], "ARMOR");
 
             Character character = new Character(name, surname, race, charClass, role,
-                    str, dex, con, intl, wis, cha);
+                    str, dex, con, intl, wis, cha, hp, armor);
 
             // ВОТ ГЛАВНАЯ СТРОКА СОХРАНЕНИЯ:
             Player.save(new Player(telegramId, character), Path.of("players"));

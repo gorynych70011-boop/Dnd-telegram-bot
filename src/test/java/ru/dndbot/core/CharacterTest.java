@@ -61,7 +61,7 @@ class CharacterTest {
         long TestId = 888888L;
 
         ru.dndbot.core.Character testChar = new ru.dndbot.core.Character("TestName", "TestSurname", "Elf", "Human", "Student",
-                15, 14, 13, 12, 11, 10);
+                15, 14, 13, 12, 11, 10, 100, 100);
 
         Player.save(new Player(TestId, testChar), tempDir);
 
