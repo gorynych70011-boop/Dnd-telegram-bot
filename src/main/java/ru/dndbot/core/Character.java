@@ -3,7 +3,6 @@ import java.util.Random;
 
 
 
-
 public class Character{
     String name;
     String surname;
@@ -20,7 +19,7 @@ public class Character{
     int armor;
 
     public Character(String name, String surname, String character_class, String race, String role,
-int strength, int dexterity, int constitution, int intelligence, int wisdom, int charism, int hp, int armor){
+int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma, int hp, int armor){
         this.name = name;
         this.surname = surname;
         this.character_class = character_class;
@@ -78,7 +77,7 @@ int strength, int dexterity, int constitution, int intelligence, int wisdom, int
 
     public String getName() { return name; }
 
-    public int getArmor() {return armor; }
+
     public int getStrength() { return strength; }
     public int getDexterity() { return dexterity; }
     public int getConstitution() { return constitution; }
@@ -86,6 +85,7 @@ int strength, int dexterity, int constitution, int intelligence, int wisdom, int
     public int getWisdom() { return wisdom; }
     public int getCharisma() { return charisma; }
     public int getHp() {return hp; }
+    public int getArmor() {return armor; }
     public boolean isAlive(){
         return this.hp > 0;
     }

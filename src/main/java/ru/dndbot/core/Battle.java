@@ -9,32 +9,46 @@ public class Battle {
         this.en = en;
     }
 
-    public boolean fight() {
-        while (ch.isAlive()) {
-            int attackRoll = ch.RollAttack();
+    public String doRound() {
+        StringBuilder log = new StringBuilder();
 
-            if (attackRoll >= en.getArmor()){
-                int damage = ch.calculateDamage();
-                en.takeDamage(damage);
-            }else{
-                //promah
-            }
-            if (!en.isAlive()){
-                return true;
-            }
-
-            int enAttackRoll = en.rollAttack();
-
-            if (enAttackRoll >= ch.getArmor()){
-                int enDamage = en.calculateDamage();
-                ch.takeDamage(enDamage);
-            }else{
-             // promah
-            }
-            if(!ch.isAlive()){
-                return false;
-            }
+        // --- Ход персонажа ---
+        int attackRoll = ch.RollAttack();
+        if (attackRoll >= en.getArmor()) {
+            int damage = ch.calculateDamage();
+            en.takeDamage(damage);
+            log.append("Вы атаковали ").append(en.getName())
+                    .append(" и нанесли ").append(damage).append(" урона. ")
+                    .append("(У него осталось ").append(en.getHp()).append(" HP)\n");
+        } else {
+            log.append("Вы промахнулись по ").append(en.getName()).append(".\n");
         }
-        return false;
+
+        if (!en.isAlive()) {
+            log.append("Вы победили! ");
+            return log.toString();
+        }
+
+        // --- Ход врага ---
+        int enAttackRoll = en.rollAttack();
+        if (enAttackRoll >= ch.getArmor()) {
+            int enDamage = en.calculateDamage();
+            ch.takeDamage(enDamage);
+            log.append(en.getName()).append(" ударил вас и нанес ")
+                    .append(enDamage).append(" урона. ")
+                    .append("(У вас осталось ").append(ch.getHp()).append(" HP)\n");
+        } else {
+            log.append(en.getName()).append(" промахнулся по вам.\n");
+        }
+
+        if (!ch.isAlive()) {
+            log.append("Вы погибли.");
+        }
+
+        return log.toString();
+    }
+
+    public boolean isOver() {
+        return !ch.isAlive() || !en.isAlive();
     }
 }

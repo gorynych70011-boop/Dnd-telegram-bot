@@ -28,6 +28,7 @@ public class Main {
         registry.register(new CharacterCommand());
         registry.register(new RollCommand());
         registry.register(new CheckCommand());
+        registry.register(new BattleCommand());
         registry.register(new HelpCommand(registry));
 
         BotLogic logic = new BotLogic(registry);

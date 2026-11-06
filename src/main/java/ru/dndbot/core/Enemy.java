@@ -8,9 +8,10 @@ public class Enemy {
     private int armor;
     private int strength;
 
-    public Enemy(int max_hp){
+    public Enemy(String name, int max_hp, int armor, int strength){
+        this.name = name;
         this.max_hp = max_hp;
-        this.hp = hp;
+        this.hp = max_hp;
         this.armor = armor;
         this.strength = strength;
     }
@@ -30,6 +31,14 @@ public class Enemy {
         int randomBonus = rand.nextInt(3) + 1;
 
         return baseDamage + strength + randomBonus;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public int getHp(){
+        return hp;
     }
 
     public int getArmor(){

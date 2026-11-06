@@ -55,7 +55,7 @@ public class CharacterCommand implements Command {
                         3, 4, 5, 6, 100, 100);
             } else if (parts[0].equals("2")) {
                 c = new Character("C", "D", "Barbarian", "Gnom", "Qwer", 6, 5,
-                        4, 3, 2, 1, 100, 100);
+                        4, 3, 2, 10, 100, 100);
             } else {
                 c = new Character("E", "F", "Sorcerer", "XZ", "WASD", 10, 10,
                         10, 10, 10, 10, 100, 100);

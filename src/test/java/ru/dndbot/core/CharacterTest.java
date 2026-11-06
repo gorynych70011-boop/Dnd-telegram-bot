@@ -1,5 +1,6 @@
 package ru.dndbot.core;
 
+import com.google.gson.Gson;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.api.Test;
 import ru.dndbot.command.CharacterCommand;
@@ -66,6 +67,8 @@ class CharacterTest {
         Player.save(new Player(TestId, testChar), tempDir);
 
         Player savedPlayer = PlayerRead.findByTelegramId(TestId, tempDir);
+
+        System.out.println("JSON string: " + new Gson().toJson(savedPlayer));
 
         assertNotNull(savedPlayer);
         assertEquals("TestName", savedPlayer.character.getName());

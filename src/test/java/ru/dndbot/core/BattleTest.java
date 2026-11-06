@@ -8,13 +8,17 @@ public class BattleTest {
     void characterWinsBattle(){
         Character TestChar = new Character("Bot", "Test", "BotTest", "Bot", "Fighter", 10, 10,
                 10, 10, 10, 10, 100, 100);
-        Enemy TestEnemy = new Enemy(50);
+        Enemy TestEnemy = new Enemy("Test", 10, 10, 10);
 
         Battle battle = new Battle(TestChar, TestEnemy);
 
-        boolean result = battle.fight();
+        int rounds = 0;
+        while (!battle.isOver() && rounds < 100) {
+            battle.doRound();
+            rounds++;
+        }
 
-        assertTrue(result);
+        assertTrue(battle.isOver());
         assertTrue(TestChar.isAlive());
         assertFalse(TestEnemy.isAlive());
     }
