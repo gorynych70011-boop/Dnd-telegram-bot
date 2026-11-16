@@ -10,7 +10,9 @@ public class BattleTest {
                 10, 10, 10, 10, 100, 100);
         Enemy TestEnemy = new Enemy("Test", 10, 10, 10);
 
-        Battle battle = new Battle(TestChar, TestEnemy);
+        Inventory TestInventory = new Inventory();
+
+        Battle battle = new Battle(TestChar, TestInventory, TestEnemy);
 
         int rounds = 0;
         while (!battle.isOver() && rounds < 100) {

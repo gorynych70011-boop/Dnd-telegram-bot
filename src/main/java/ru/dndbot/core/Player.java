@@ -8,12 +8,14 @@ import java.nio.file.Path;
 public class Player {
     public long telegramId;
     public Character character;
+    public Inventory inventory;
 
     private static final Gson GSON = new Gson();
 
     public Player(long telegramId, Character character){
         this.telegramId = telegramId;
         this.character = character;
+        this.inventory = new Inventory();
     }
 
     // Сохраняем в папку players/

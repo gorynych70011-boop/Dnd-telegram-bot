@@ -18,6 +18,11 @@ public class PlayerRead {
             return null; // Игрок не найден
         }
 
-        return GSON.fromJson(Files.readString(file), Player.class);
+        Player player = GSON.fromJson(Files.readString(file), Player.class);
+
+        if (player != null && player.inventory == null){
+            player.inventory = new Inventory();
+        }
+        return player;
     }
 }

@@ -17,6 +17,7 @@ public class Character{
     int charisma;
     int hp;
     int armor;
+    private Inventory inventory;
 
     public Character(String name, String surname, String character_class, String race, String role,
 int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma, int hp, int armor){
@@ -59,26 +60,46 @@ int strength, int dexterity, int constitution, int intelligence, int wisdom, int
             this.dexterity +=1;
         }
     }
-    public int RollAttack(){
+
+    public void heal(int amount){
+        this.hp += amount;
+        if(this.hp > 100){
+            this.hp = 100;
+        }
+    }
+
+    public void setInventory(Inventory inventory){
+        this.inventory = inventory;
+    }
+
+    public int rollD20(){
         Random rand = new Random();
-        int d20 = rand.nextInt(20) + 1;
-
-        int modifier = this.strength;
-
-        return d20 + modifier;
+        return rand.nextInt(20) + 1;
     }
 
     public int calculateDamage(){
+        Random rand = new Random();
         int baseDamage = 5;
-        int modifier = this.strength;
+        int randomBonus = rand.nextInt(3) + 1;
 
-        return baseDamage + modifier;
+
+        return baseDamage + getStrength() + randomBonus;
     }
 
     public String getName() { return name; }
+    public String getSurname(){return surname; }
 
+    public int getStrength() {
+        int totalStrength = this.strength;
 
-    public int getStrength() { return strength; }
+        if(this.inventory != null){
+            for (Item item : this.inventory.getItems()){
+                totalStrength += item.getBonusStr();
+            }
+        }
+        return totalStrength;
+    }
+
     public int getDexterity() { return dexterity; }
     public int getConstitution() { return constitution; }
     public int getIntelligence() { return intelligence; }
@@ -99,6 +120,36 @@ int strength, int dexterity, int constitution, int intelligence, int wisdom, int
         if (this.hp < 0){
             this.hp = 0;
         }
+    }
+
+    public int getTotalStrength(Inventory inventory){
+        int total = this.strength;
+        if (inventory != null){
+            for (Item item : inventory.getItems()){
+                total += item.getBonusStr();
+            }
+        }
+        return total;
+    }
+
+    public int getTotalDexterity(Inventory inventory){
+        int total = this.dexterity;
+        if (inventory != null){
+            for (Item item : inventory.getItems()){
+                total += item.getBonusDex();
+            }
+        }
+        return total;
+    }
+
+    public int getTotalHp(Inventory inventory){
+        int total = this.hp;
+        if (inventory != null){
+            for (Item item : inventory.getItems()){
+                total += item.getBonusHp();
+            }
+        }
+        return total;
     }
 
     @Override

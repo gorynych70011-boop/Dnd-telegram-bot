@@ -52,13 +52,13 @@ public class CharacterCommand implements Command {
             Character c;
             if (parts[0].equals("1")) {
                 c = new Character("A", "B", "Fighter", "Human", "Abc", 1, 2,
-                        3, 4, 5, 6, 100, 100);
+                        3, 4, 5, 6, 100, 10);
             } else if (parts[0].equals("2")) {
                 c = new Character("C", "D", "Barbarian", "Gnom", "Qwer", 6, 5,
-                        4, 3, 2, 10, 100, 100);
+                        4, 3, 2, 10, 100, 10);
             } else {
                 c = new Character("E", "F", "Sorcerer", "XZ", "WASD", 10, 10,
-                        10, 10, 10, 10, 100, 100);
+                        10, 10, 10, 10, 100, 1);
             }
 
             Player.save(new Player(telegramId, c), Path.of("players"));
