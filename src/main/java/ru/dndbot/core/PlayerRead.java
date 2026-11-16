@@ -20,8 +20,9 @@ public class PlayerRead {
 
         Player player = GSON.fromJson(Files.readString(file), Player.class);
 
-        if (player != null && player.inventory == null){
-            player.inventory = new Inventory();
+        if (player != null){
+            if(player.inventory == null) player.inventory = new Inventory();
+            if(player.level == 0) player.level =1;
         }
         return player;
     }

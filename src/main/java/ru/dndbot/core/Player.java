@@ -9,13 +9,16 @@ public class Player {
     public long telegramId;
     public Character character;
     public Inventory inventory;
-
+    public int level;
+    public int xp;
     private static final Gson GSON = new Gson();
 
     public Player(long telegramId, Character character){
         this.telegramId = telegramId;
         this.character = character;
         this.inventory = new Inventory();
+        this.level = 1;
+        this.xp = 0;
     }
 
     // Сохраняем в папку players/

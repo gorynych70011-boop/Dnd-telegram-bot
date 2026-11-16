@@ -31,6 +31,7 @@ public class Main {
         registry.register(new BattleCommand());
         registry.register(new InventoryCommand());
         registry.register(new ActionCommand());
+        registry.register(new LevelCommand());
         registry.register(new HelpCommand(registry));
 
         BotLogic logic = new BotLogic(registry);

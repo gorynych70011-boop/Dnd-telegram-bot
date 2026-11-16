@@ -80,20 +80,36 @@ public class Fight {
             String lootMsg = giveLoot(player, en, playerDir);
             return roundLog + lootMsg + "\n\nБой окончен.";
         } else {
-            return roundLog + "\n\nНапишите /battle attack, чтобы ударить снова, или /battle escape, чтобы сбежать.";
+            return roundLog + "\n\nНапишите /battle attack, чтобы ударить снова, или /battle escape, чтобы сбежать." +
+                    " Напишите /action чтобы воспользоваться предметами.";
         }
     }
 
     private static String giveLoot(Player player, Enemy en, Path playerDir) throws IOException {
         if (player.character.isAlive() && !en.isAlive()) {
+            StringBuilder result = new StringBuilder();
+
             Item loot = en.rollLoot();
             if (loot != null) {
                 player.inventory.addItem(loot);
-                Player.save(player, playerDir);
-                return "\n\n Добыча:  Вы получили " + loot.toString();
+                result.append("\n\nДобыча: Вы получили ").append(loot.toString());
             } else {
-                return "\n\nС этого противника не выпало добычи.";
+                result.append("\n\nС этого противника не выпало добычи.");
             }
+
+            int xpReward = 50;
+            player.xp += xpReward;
+            result.append("\nВы получили ").append(xpReward).append(" опыта! (Всего: ").append(player.xp).append("/100)");
+
+            while (player.xp >= 100) {
+                player.level++;
+                player.xp -= 100;
+                result.append("\n\nПОВЫШЕНИЕ УРОВНЯ! Теперь ваш уровень: ").append(player.level).append("!");
+            }
+
+            Player.save(player, playerDir);
+
+            return result.toString();
         }
         return "";
     }
