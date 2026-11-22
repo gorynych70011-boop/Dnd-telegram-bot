@@ -32,7 +32,10 @@ public class Main {
         registry.register(new InventoryCommand());
         registry.register(new ActionCommand());
         registry.register(new LevelCommand());
+        registry.register(new EquipCommand());
         registry.register(new HelpCommand(registry));
+        registry.register(new EquipmentCommand());
+        registry.register(new ProfileCommand());
 
         BotLogic logic = new BotLogic(registry);
 

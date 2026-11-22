@@ -1,14 +1,12 @@
 package ru.dndbot.command;
 
-import ru.dndbot.core.Inventory;
-import ru.dndbot.core.Item;
-import ru.dndbot.core.Player;
-import ru.dndbot.core.PlayerRead;
+import ru.dndbot.core.*;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 
 public class InventoryCommand implements Command {
     @Override
@@ -41,7 +39,25 @@ public class InventoryCommand implements Command {
             return "Ваш инвентарь пуст. Сразитесь с кем-нибудь, чтобы получить лут!";
         }
 
-        StringBuilder sb = new StringBuilder("Ваш инвентарь:  \n\n");
+        StringBuilder sb = new StringBuilder("Экипировка:  \n");
+
+        Map<EquipmentSlot, Item> equippedItems = player.character.getEquipment().getAllEquipped();
+
+        if (equippedItems.isEmpty()){
+            sb.append("• (пусто)\n");
+        }else{
+            for (Map.Entry<EquipmentSlot, Item> entry : equippedItems.entrySet()){
+                String slotName = switch (entry.getKey()){
+                    case MAIN_HAND -> "Оружие";
+                    case ARMOR -> "Броня";
+                    case HELMET -> "Шлем";
+                    case NULL -> "Сыры, зелья и т.д.";
+                };
+                sb.append(slotName).append(": ").append(entry.getValue().toString()).append("\n");
+            }
+        }
+        sb.append("\n Инвентарь: \n");
+
         for (Item item : inv.getItems()){
             sb.append("• ").append(item.toString()).append("\n");
         }

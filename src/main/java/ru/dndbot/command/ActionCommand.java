@@ -5,6 +5,7 @@ import ru.dndbot.core.*;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Locale;
 
 public class ActionCommand implements Command {
     @Override
@@ -21,7 +22,9 @@ public class ActionCommand implements Command {
     public String usage() {
         return "Действие в бою\n" +
                 "`/action` - показать действия в бою\n" +
-                "Например: `/action heal` - выпить лечебное зелье";
+                "Например: `/action use <Название>` - использовать предмет (зелье. еду)\n\n" +
+                "Пример: \n" +
+                "`/action use Зелье силы`";
     }
 
     @Override
@@ -38,12 +41,17 @@ public class ActionCommand implements Command {
         if (args == null || args.isBlank()) {
             StringBuilder menu = new StringBuilder("Доступные действия \n");
 
-            boolean hasHealItem = player.inventory.getItems().stream().anyMatch(item -> item.getBonusHp() > 0);
+            boolean hasUsableItems = false;
 
-            if (hasHealItem) {
-                menu.append("• `/action heal` - выпить лечебное зелье/съесть еду\n");
-            } else {
-                menu.append("• У вас нет лечебных предметов в инвентарею\n");
+            for (Item item : player.inventory.getItems()){
+                if(!item.isEquippable()){
+                    menu.append("• `/action use ").append(item.getName()).append("\n");
+                    hasUsableItems = true;
+                }
+            }
+
+            if (!hasUsableItems) {
+                menu.append("• у вас нет используемых предметов (зелий или еды)\n");
             }
 
             menu.append("\n`/battle attack` - ударить\n");
@@ -51,32 +59,61 @@ public class ActionCommand implements Command {
 
             return menu.toString();
         }
-        if (args.trim().equalsIgnoreCase("heal")) {
-            Item healItem = null;
-            if (player.inventory != null) {
-                for (Item item : player.inventory.getItems()) {
-                    if (item.getBonusHp() > 0) {
-                        healItem = item;
-                        break;
-                    }
+        if (args.trim().toLowerCase().startsWith("use")) {
+            String itemName = args.trim().substring(3).trim();
+
+            if (itemName.isEmpty()) {
+                return "Укажите название предмета. \nПример: `action use Зелье силы`";
+            }
+
+            Item itemToUse = null;
+            for(Item item : player.inventory.getItems()){
+                if(item.getName().equalsIgnoreCase(itemName) && !item.isEquippable()){
+                    itemToUse = item;
+                    break;
                 }
             }
-            if (healItem == null) {
-                return "У вас нет лечебных предметов!";
-            }
-            player.character.heal(healItem.getBonusHp());
 
-            player.inventory.removeItem(healItem.getName());
+            if(itemToUse == null){
+                return "У вас нет используемого предмета '" + itemName + "' в инвентаре";
+            }
+
+            if(!itemToUse.isUsableInBattle()){
+                return "Этот предмет нельзя использовать в бою!";
+            }
+
+            StringBuilder result = new StringBuilder();
+            result.append("Вы использовали").append(itemToUse.getName()).append("!\n");
+
+            boolean effectApplied = false;
+
+            if (itemToUse.getBonusHp() > 0){
+                player.character.heal(itemToUse.getBonusHp());
+                result.append(" Востановленно ").append(itemToUse.getBonusHp()).append(" HP. ");
+                effectApplied = true;
+            }
+
+            if (itemToUse.getBonusStr() > 0){
+                player.character.setStrength(player.character.getStrength() + itemToUse.getBonusStr());
+                result.append(" Сила увеличина  на  ").append(itemToUse.getBonusStr()).append(". ");
+                effectApplied = true;
+            }
+
+            if (itemToUse.getBonusDex() > 0) {
+                player.character.setDexterity(player.character.getDexterity() + itemToUse.getBonusDex());
+                result.append(" Ловкость увеличина  на  ").append(itemToUse.getBonusDex()).append(". ");
+                effectApplied = true;
+            }
+
+            if(!effectApplied){return "Этот предмет нельзя использовать (у него нет эффектов)"; }
+
+            result.append("\n\n");
+
+            player.inventory.removeItem(itemToUse.getName());
 
             Player.save(player, playerDir);
 
             String enemyTurnLog = currentBattle.enemyTurn();
-
-            StringBuilder result = new StringBuilder();
-
-            result.append("Вы использовали ").append(healItem.getName())
-                    .append(" и восстановили ").append(healItem.getBonusHp()).append(" HP!\n");
-            result.append("Ваше текущее HP: ").append(player.character.getHp()).append("\n\n");
 
             result.append("Пока вы пили зелье, враг не спал:\n");
             result.append(enemyTurnLog);

@@ -23,6 +23,10 @@ public class PlayerRead {
         if (player != null){
             if(player.inventory == null) player.inventory = new Inventory();
             if(player.level == 0) player.level =1;
+
+            if (player.character != null && player.character.getEquipment() == null){
+                player.character.setEquipment(new Equipment());
+            }
         }
         return player;
     }

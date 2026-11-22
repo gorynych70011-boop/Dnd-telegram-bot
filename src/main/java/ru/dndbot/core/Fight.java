@@ -20,15 +20,15 @@ public class Fight {
         Enemy en = new Enemy(enemyName, 50, 10, 4);
 
         if (enemyName.equalsIgnoreCase("Goblin")){
-            en.addLoot(new Item("Ржавый кинжал", "Обычный", 2, 0, 0));
-            en.addLoot(new Item("Кусок сыра", "Обычный", 0 , 0, 5));
-            en.addLoot(new Item("Золотая монета", "Необычный", 0 ,0, 0));
+            en.addLoot(new Item("Ржавый кинжал", "Обычный", 2, 0, 0, 0, true, EquipmentSlot.MAIN_HAND));
+            en.addLoot(new Item("Зелье лечения", "Необычный", 0, 0, 10, true));
+            en.addLoot(new Item("Кожаная броня", "Обычный", 0 ,0, 0, 2, true, EquipmentSlot.ARMOR));
         } else if (enemyName.equalsIgnoreCase("Orc")) {
-            en.addLoot(new Item("Тяжелый топор", "Необычный", 4, 0, 0));
-            en.addLoot(new Item("Клык орка", "Редкий", 0, 2, 0));
-            en.addLoot(new Item("Зелье силы", "Редкий",7, 0, 0));
+            en.addLoot(new Item("Тяжелый топор", "Необычный", 4, 0, 0, 0, true, EquipmentSlot.MAIN_HAND));
+            en.addLoot(new Item("Кольчуга", "Редкий", 0, 0, 0, 4, true, EquipmentSlot.ARMOR));
+            en.addLoot(new Item("Зелье силы", "Редкий",7, 0, 0, true));
         } else {
-            en.addLoot(new Item("Странный камень", "Мусор",1, 0,0));
+            en.addLoot(new Item("Странный камень", "Мусор",1, 0,0, false));
         }
 
         Battle battle = new Battle(player.character, player.inventory, en);

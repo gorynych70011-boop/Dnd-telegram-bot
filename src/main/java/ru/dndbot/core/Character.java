@@ -1,6 +1,7 @@
 package ru.dndbot.core;
 import java.util.Random;
-
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Character{
@@ -18,6 +19,8 @@ public class Character{
     int hp;
     int armor;
     private Inventory inventory;
+    private Item equippedArmor;
+    private Equipment equipment;
 
     public Character(String name, String surname, String character_class, String race, String role,
 int strength, int dexterity, int constitution, int intelligence, int wisdom, int charisma, int hp, int armor){
@@ -34,6 +37,7 @@ int strength, int dexterity, int constitution, int intelligence, int wisdom, int
         this.charisma = charisma;
         this.hp = hp;
         this.armor = armor;
+        this.equipment = new Equipment();
 
         if (race.equals("Elf")){
             this.dexterity += 1;
@@ -61,6 +65,46 @@ int strength, int dexterity, int constitution, int intelligence, int wisdom, int
         }
     }
 
+    public String getRace(){return race;}
+
+    public String getCharacterClass(){return character_class;}
+
+    public String getRole(){return role;}
+
+    public void equipArmor(Item armor){
+        this.equippedArmor = armor;
+    }
+
+    public Item getEquippedArmor(){
+        return equippedArmor;
+    }
+
+    public int getArmor(){
+        int baseArmor = 10 + (dexterity / 2);
+        if (this.equipment != null){
+            baseArmor += this.equipment.getBonusArmor();
+        }
+        return baseArmor;
+    }
+
+    public int getStrength() {
+        int totalStrength = this.strength;
+
+        if(this.inventory != null){
+            totalStrength += this.equipment.getBonusStr();
+        }
+        return totalStrength;
+    }
+
+    public int getDexterity(){
+        int total = this.dexterity;
+
+        if (this.equipment != null){
+            total += this.equipment.getBonusDex();
+        }
+        return total;
+    }
+
     public void heal(int amount){
         this.hp += amount;
         if(this.hp > 100){
@@ -70,6 +114,14 @@ int strength, int dexterity, int constitution, int intelligence, int wisdom, int
 
     public void setInventory(Inventory inventory){
         this.inventory = inventory;
+    }
+
+    public void setStrength(int strength){
+        this.strength = strength;
+    }
+
+    public void setDexterity(int dexterity){
+        this.dexterity = dexterity;
     }
 
     public int rollD20(){
@@ -86,27 +138,23 @@ int strength, int dexterity, int constitution, int intelligence, int wisdom, int
         return baseDamage + getStrength() + randomBonus;
     }
 
+    public Equipment getEquipment(){
+        return equipment;
+    }
+
+    public void setEquipment(Equipment equipment){
+        this.equipment = equipment;
+    }
+
     public String getName() { return name; }
     public String getSurname(){return surname; }
 
-    public int getStrength() {
-        int totalStrength = this.strength;
 
-        if(this.inventory != null){
-            for (Item item : this.inventory.getItems()){
-                totalStrength += item.getBonusStr();
-            }
-        }
-        return totalStrength;
-    }
-
-    public int getDexterity() { return dexterity; }
     public int getConstitution() { return constitution; }
     public int getIntelligence() { return intelligence; }
     public int getWisdom() { return wisdom; }
     public int getCharisma() { return charisma; }
     public int getHp() {return hp; }
-    public int getArmor() {return armor; }
     public boolean isAlive(){
         return this.hp > 0;
     }
