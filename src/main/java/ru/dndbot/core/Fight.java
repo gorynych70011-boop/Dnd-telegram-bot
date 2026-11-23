@@ -17,11 +17,11 @@ public class Fight {
         if (player == null) { return "Сначала создайте персонажа!"; }
         if (!player.character.isAlive()) { return "Ваш персонаж мертв. Сначала восстановите здоровье!"; }
 
-        Enemy en = EnemyFactor.createEnemy(enemyName);
+        Enemy en = EnemyFactory.createEnemy(enemyName);
 
         if (en == null) {
             return "Противник '" + enemyName + "' не найден!\n\n" +
-                    EnemyFactor.getAvailableEnemiesText();
+                    EnemyFactory.getAvailableEnemiesText();
         }
 
         Battle battle = new Battle(player.character, player.inventory, en);

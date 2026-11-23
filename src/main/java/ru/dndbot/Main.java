@@ -2,6 +2,7 @@ package ru.dndbot;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
+import org.telegram.telegrambots.meta.api.objects.payments.PreCheckoutQuery;
 import ru.dndbot.command.*;
 import ru.dndbot.core.BotLogic;
 import ru.dndbot.telegram.TelegramBot;
@@ -26,8 +27,6 @@ public class Main {
         registry.register(new AuthorCommand());
         registry.register(new AboutCommand());
         registry.register(new CharacterCommand());
-        registry.register(new RollCommand());
-        registry.register(new CheckCommand());
         registry.register(new BattleCommand());
         registry.register(new InventoryCommand());
         registry.register(new ActionCommand());
@@ -36,6 +35,7 @@ public class Main {
         registry.register(new HelpCommand(registry));
         registry.register(new EquipmentCommand());
         registry.register(new ProfileCommand());
+        registry.register(new DropCommand());
 
         BotLogic logic = new BotLogic(registry);
 
