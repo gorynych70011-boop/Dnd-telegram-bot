@@ -94,7 +94,7 @@ public class ActionCommand implements Command {
             }
 
             if (itemToUse.getBonusStr() > 0){
-                player.character.setStrength(player.character.getStrength() + itemToUse.getBonusStr());
+                player.character.setStrength(itemToUse.getBonusStr());
                 result.append(" Сила увеличина  на  ").append(itemToUse.getBonusStr()).append(". ");
                 effectApplied = true;
             }
@@ -107,6 +107,8 @@ public class ActionCommand implements Command {
 
             if(!effectApplied){return "Этот предмет нельзя использовать (у него нет эффектов)"; }
 
+            result.append("\n Ваше текущее здоровье: ").append(player.character.getHp()).append(" HP:\n\n");
+
             result.append("\n\n");
 
             player.inventory.removeItem(itemToUse.getName());
@@ -115,8 +117,9 @@ public class ActionCommand implements Command {
 
             String enemyTurnLog = currentBattle.enemyTurn();
 
-            result.append("Пока вы пили зелье, враг не спал:\n");
+            result.append("Пока вы использовали предмет, враг не спал:\n");
             result.append(enemyTurnLog);
+            result.append("\n Ваше здоровье после ответа врага: ").append(player.character.getHp()).append(" HP\n");
 
             if (currentBattle.isOver()) {
                 BattleStorage.removeBattle(telegramId);

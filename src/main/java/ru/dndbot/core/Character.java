@@ -134,7 +134,6 @@ int strength, int dexterity, int constitution, int intelligence, int wisdom, int
         int baseDamage = 5;
         int randomBonus = rand.nextInt(3) + 1;
 
-
         return baseDamage + getStrength() + randomBonus;
     }
 
